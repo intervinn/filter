@@ -9,6 +9,7 @@ type Item struct {
 	End int
 }
 
+// Checks if a slice could possibly be an exception - if there is an exception that begins on a slice.
 func IsPossibleException(slice string) bool {
 	for _, v := range Exceptions {
 		if strings.HasPrefix(v, slice) {
@@ -18,6 +19,17 @@ func IsPossibleException(slice string) bool {
 	return false
 }
 
+// Checks if a slice is perfectly equal to one of exceptions.
+func IsException(slice string) bool {
+	for _, v := range Exceptions {
+		if v == slice {
+			return true
+		}
+	}
+	return false
+}
+
+// Applies all possible replacements to bypass profanities (leet, cyrillic, etc.)
 func ApplyReplacements(slice string) string {
 	res := slice
 	for k, v := range Replacements {
@@ -26,16 +38,15 @@ func ApplyReplacements(slice string) string {
 	return res
 }
 
+// Checks if a slice of a string is a profanity.
 func IsProfane(slice string) bool {
 	str := slice
 	for k, v := range Replacements {
 		str = strings.ReplaceAll(str, string(k), string(v))
 	}
 
-	for _, v := range Exceptions {
-		if str == v {
-			return false
-		}
+	if IsException(slice) {
+		return false
 	}
 
 	for _, v := range Dictionary {
@@ -46,15 +57,7 @@ func IsProfane(slice string) bool {
 	return false
 }
 
-func IsException(slice string) bool {
-	for _, v := range Exceptions {
-		if v == slice {
-			return true
-		}
-	}
-	return false
-}
-
+// Parses a string character by character, analyzing for existence of any profanities.
 func Parse(text string) []Item {
 	lower := strings.ToLower(text)
 	res := []Item{}

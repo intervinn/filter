@@ -7,6 +7,8 @@ import (
 )
 
 func main() {
+	fmt.Println(filtr.IsProfane("this shit"))
+
 	str := "holy shit @ss bananas"
 	nodes := filtr.Parse(str)
 
